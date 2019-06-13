@@ -18,7 +18,6 @@ package com.zaxxer.hikari.metrics.dropwizard;
 
 import java.util.concurrent.TimeUnit;
 
-import com.codahale.metrics.Gauge;
 import com.codahale.metrics.Histogram;
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
@@ -56,23 +55,23 @@ public final class CodaHaleMetricsTracker implements IMetricsTracker
       this.connectionCreation = registry.histogram(MetricRegistry.name(poolName, METRIC_CATEGORY, METRIC_NAME_CONNECT));
       this.connectionTimeoutMeter = registry.meter(MetricRegistry.name(poolName, METRIC_CATEGORY, METRIC_NAME_TIMEOUT_RATE));
 
-      registry.register(MetricRegistry.name(poolName, METRIC_CATEGORY, METRIC_NAME_TOTAL_CONNECTIONS),
-         (Gauge<Integer>) poolStats::getTotalConnections);
+      registry.gauge(MetricRegistry.name(poolName, METRIC_CATEGORY, METRIC_NAME_TOTAL_CONNECTIONS),
+         () -> poolStats::getTotalConnections);
 
-      registry.register(MetricRegistry.name(poolName, METRIC_CATEGORY, METRIC_NAME_IDLE_CONNECTIONS),
-         (Gauge<Integer>) poolStats::getIdleConnections);
+      registry.gauge(MetricRegistry.name(poolName, METRIC_CATEGORY, METRIC_NAME_IDLE_CONNECTIONS),
+         () -> poolStats::getIdleConnections);
 
-      registry.register(MetricRegistry.name(poolName, METRIC_CATEGORY, METRIC_NAME_ACTIVE_CONNECTIONS),
-         (Gauge<Integer>) poolStats::getActiveConnections);
+      registry.gauge(MetricRegistry.name(poolName, METRIC_CATEGORY, METRIC_NAME_ACTIVE_CONNECTIONS),
+         () -> poolStats::getActiveConnections);
 
-      registry.register(MetricRegistry.name(poolName, METRIC_CATEGORY, METRIC_NAME_PENDING_CONNECTIONS),
-         (Gauge<Integer>) poolStats::getPendingThreads);
+      registry.gauge(MetricRegistry.name(poolName, METRIC_CATEGORY, METRIC_NAME_PENDING_CONNECTIONS),
+         () -> poolStats::getPendingThreads);
 
-      registry.register(MetricRegistry.name(poolName, METRIC_CATEGORY, METRIC_NAME_MAX_CONNECTIONS),
-         (Gauge<Integer>) poolStats::getMaxConnections);
+      registry.gauge(MetricRegistry.name(poolName, METRIC_CATEGORY, METRIC_NAME_MAX_CONNECTIONS),
+         () -> poolStats::getMaxConnections);
 
-      registry.register(MetricRegistry.name(poolName, METRIC_CATEGORY, METRIC_NAME_MIN_CONNECTIONS),
-         (Gauge<Integer>) poolStats::getMinConnections);
+      registry.gauge(MetricRegistry.name(poolName, METRIC_CATEGORY, METRIC_NAME_MIN_CONNECTIONS),
+         () -> poolStats::getMinConnections);
    }
 
    /** {@inheritDoc} */
